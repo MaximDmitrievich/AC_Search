@@ -39,7 +39,6 @@ namespace ssn
                 }
             }
         }
-        std::cout << "Added pattern: " << this->patterns << std::endl;
     }
     void TAhoCorasick::Print(std::vector<std::pair<std::string, std::pair<int, int>>> &value) //value
     {
