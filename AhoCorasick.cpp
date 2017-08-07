@@ -15,10 +15,7 @@ namespace ssn
 
     void TAhoCorasick::Add(std::vector<std::string> &value)
     {
-        std::shared_ptr<TNode> node = this->root;
-        if (this->root == nullptr) {
-            std::cout << "ROOT IS UNDEFINED" << std::endl;
-        }
+        std::shared_ptr<TNode> node = this->root;      
         std::shared_ptr<TNode> parent = nullptr;
         for (int i = 0; i < value.size(); i++) {
             if (node->GetLink().find(value[i]) != node->GetLink().end()) {
