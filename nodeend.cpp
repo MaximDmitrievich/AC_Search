@@ -18,10 +18,10 @@ namespace ssn
 
     TNodeEnd::~TNodeEnd()
     {
-        this->link.clear();
         this->parent = nullptr;
         this->exit = nullptr;
         this->fail = nullptr;
+        this->link.clear();
     }
 
     std::shared_ptr<TNode> TNodeEnd::SetLink(std::string value, const std::shared_ptr<TNode> &nextlink)

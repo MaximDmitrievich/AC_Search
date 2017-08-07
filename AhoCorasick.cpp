@@ -15,21 +15,28 @@ namespace ssn
 
     void TAhoCorasick::Add(std::vector<std::string> &value)
     {
+        if (value.empty()) {
+            return;
+        }
         std::shared_ptr<TNode> node = this->root;
-        for (int i = 0; i < value.size() - 1; i++) {
-            if (node->GetLink().find(value[i]) != node->GetLink().end()) {
-                node = node->GetLink().find(value[i])->second;
+        for (std::vector<std::string>::iterator it = value.begin(); it != value.end(); it++) {
+            if (node->GetLink().find(*it) != node->GetLink().end()) {
+                node = node->GetLink().find(*it)->second;
             } else {
-                if (i == (value.size() - 1)) {
-                    node = node->SetLink(value[i], std::make_shared<TNodeEnd>(node, ++this->patterns, value.size()));
+                if (*it == value.back()) {
+                    node = node->SetLink(*it, std::make_shared<TNodeEnd>(node, ++this->patterns, value.size()));
                 } else {
-                    node = node->SetLink(value[i], std::make_shared<TNodeLink>(node));
+                    node = node->SetLink(*it, std::make_shared<TNodeLink>(node));
                 }
             }
         }
+        node = nullptr;
     }
     void TAhoCorasick::Print(std::vector<std::pair<std::string, std::pair<int, int>>> &value)
     {
+        if (value.empty()) {
+            return;
+        }   
         this->BuildAutomat();
         int ind = 0;
         std::shared_ptr<TNode> curr = this->root;
