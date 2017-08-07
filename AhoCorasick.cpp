@@ -15,27 +15,15 @@ namespace ssn
 
     void TAhoCorasick::Add(std::vector<std::string> &value)
     {
-        std::shared_ptr<TNode> node = this->root;      
-        std::shared_ptr<TNode> parent = nullptr;
+        std::shared_ptr<TNode> node = this->root;
         for (int i = 0; i < value.size(); i++) {
             if (node->GetLink().find(value[i]) != node->GetLink().end()) {
-                parent = node;
                 node = node->GetLink().find(value[i])->second;
             } else {
                 if (i == (value.size() - 1)) {
-                    std::shared_ptr<TNode> newnode (new TNodeEnd());
-					newnode->SetPattern(++this->patterns);
-                    newnode->SetSize(value.size());
-                    node->SetLink(value[i], newnode);
-                    newnode->SetParent(node);
-                    parent = node;
-                    node = newnode;
+                    node = node->SetLink(value[i], new TNodeEnd(node, ++this->patterns, value.size()));
                 } else {
-                    std::shared_ptr<TNode> newnode (new TNodeLink());
-                    node->SetLink(value[i], newnode);
-                    newnode->SetParent(node);
-                    parent = node;
-                    node = newnode;
+                    node = node->SetLink(value[i], new TNodeLink(node));
                 }
             }
         }

@@ -2,13 +2,17 @@
 
 namespace ssn
 {
-    TNodeLink::TNodeLink()
+    TNodeLink::TNodeLink(const std::shared_ptr<TNode> &parentvalue)
     {
         this->link.clear();
-        this->parent = nullptr;
+        this->parent = parentvalue;
         this->exit = nullptr;
         this->fail = nullptr;
         this->isEnd = false;
+    }
+    TNodeLink::TNodeLink() : parent(nullptr)
+    {
+        
     }
     TNodeLink::~TNodeLink()
     {
@@ -18,18 +22,19 @@ namespace ssn
         this->fail = nullptr;
     }
 
-    void TNodeLink::SetLink(std::string value, std::shared_ptr<TNode> nextlink)
+    std::shared_ptr<TNode> TNodeLink::SetLink(std::string value, const std::shared_ptr<TNode> &nextlink)
     {
         if (this->link.find(value) == this->link.end()) {
             this->link.insert(std::pair<std::string, std::shared_ptr<TNode>>(value, nextlink));
         }
+        return nextlink;
     }
     std::map<std::string, std::shared_ptr<TNode>> TNodeLink::GetLink()
     {
         return this->link;
     }
 
-    void TNodeLink::SetParent(std::shared_ptr<TNode> value)
+    void TNodeLink::SetParent(const std::shared_ptr<TNode> &value)
     {
         this->parent = value;
     }
@@ -38,7 +43,7 @@ namespace ssn
         return this->parent;
     }
 
-    void TNodeLink::SetExit(std::shared_ptr<TNode> value)
+    void TNodeLink::SetExit(const std::shared_ptr<TNode> &value)
     {
         this->exit = value;
     }
@@ -47,7 +52,7 @@ namespace ssn
         return this->exit;
     }
 
-    void TNodeLink::SetFail(std::shared_ptr<TNode> value)
+    void TNodeLink::SetFail(const std::shared_ptr<TNode> &value)
     {
         this->fail = value;
     }
@@ -61,7 +66,7 @@ namespace ssn
         return this->isEnd;
     }
 
-    void TNodeLink::SetPattern(int value)
+    void TNodeLink::SetPattern(const int value)
     {
 
     }
@@ -70,7 +75,7 @@ namespace ssn
         return 0;
     }
 
-    void TNodeLink::SetSize(int value)
+    void TNodeLink::SetSize(const int value)
     {
 
     }

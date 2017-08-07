@@ -2,6 +2,15 @@
 
 namespace ssn
 {
+    TNodeEnd::TNodeEnd(const std::shared_ptr<TNode> &parentvalue, const int patternvalue, const int sizevalue) : isEnd(true)
+    {
+        this->exit = nullptr;
+        this->fail = nullptr;
+        this->link.clear();
+        this->parent = parentvalue;
+        this->pattern = patternvalue;
+        this->size = sizevalue;
+    }
     TNodeEnd::TNodeEnd() : isEnd(true), pattern(0), size(0)
     {
 
@@ -9,21 +18,25 @@ namespace ssn
 
     TNodeEnd::~TNodeEnd()
     {
-
+        this->link.clear();
+        this->parent = nullptr;
+        this->exit = nullptr;
+        this->fail = nullptr;
     }
 
-    void TNodeEnd::SetLink(std::string value, std::shared_ptr<TNode> nextlink)
+    std::shared_ptr<TNode> TNodeEnd::SetLink(std::string value, const std::shared_ptr<TNode> &nextlink)
     {
         if (this->link.find(value) == this->link.end()) {
             this->link.insert(std::pair<std::string, std::shared_ptr<TNode>>(value, nextlink));
         }
+        return nextlink;
     }
     std::map<std::string, std::shared_ptr<TNode>> TNodeEnd::GetLink()
     {
         return this->link;
     }
 
-    void TNodeEnd::SetParent(std::shared_ptr<TNode> value)
+    void TNodeEnd::SetParent(const std::shared_ptr<TNode> &value)
     {
         this->parent = value;
     }
@@ -32,7 +45,7 @@ namespace ssn
         return this->parent;
     }
 
-    void TNodeEnd::SetExit(std::shared_ptr<TNode> value)
+    void TNodeEnd::SetExit(const std::shared_ptr<TNode> &value)
     {
         this->exit = value;
     }
@@ -41,7 +54,7 @@ namespace ssn
         return this->exit;
     }
 
-    void TNodeEnd::SetFail(std::shared_ptr<TNode> value)
+    void TNodeEnd::SetFail(const std::shared_ptr<TNode> &value)
     {
         this->fail = value;
     }
@@ -55,7 +68,7 @@ namespace ssn
         return this->isEnd;
     }
 
-    void TNodeEnd::SetPattern(int value)
+    void TNodeEnd::SetPattern(const int value)
     {
         this->pattern = value;
     }
@@ -64,7 +77,7 @@ namespace ssn
         return this->pattern;
     }
 
-    void TNodeEnd::SetSize(int value)
+    void TNodeEnd::SetSize(const int value)
     {
         this->size = value;
     }
