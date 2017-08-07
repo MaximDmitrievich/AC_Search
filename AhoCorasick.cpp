@@ -13,10 +13,13 @@ namespace ssn
         this->patterns = 0;
     }
 
-    void TAhoCorasick::Add(std::vector<std::string> &value) //pattern
+    void TAhoCorasick::Add(std::vector<std::string> &value)
     {
         std::shared_ptr<TNode> node = this->root;
-        std::shared_ptr<TNode> parent = this->root;
+        if (this->root == nullptr) {
+            std::cout << "ROOT IS UNDEFINED" << std::endl;
+        }
+        std::shared_ptr<TNode> parent = nullptr;
         for (int i = 0; i < value.size(); i++) {
             if (node->GetLink().find(value[i]) != node->GetLink().end()) {
                 parent = node;
@@ -24,7 +27,7 @@ namespace ssn
             } else {
                 if (i == (value.size() - 1)) {
                     std::shared_ptr<TNode> newnode (new TNodeEnd());
-                    newnode->SetPattern(++this->patterns);
+					newnode->SetPattern(++this->patterns);
                     newnode->SetSize(value.size());
                     node->SetLink(value[i], newnode);
                     newnode->SetParent(node);
@@ -40,7 +43,7 @@ namespace ssn
             }
         }
     }
-    void TAhoCorasick::Print(std::vector<std::pair<std::string, std::pair<int, int>>> &value) //value
+    void TAhoCorasick::Print(std::vector<std::pair<std::string, std::pair<int, int>>> &value)
     {
         this->BuildAutomat();
         int ind = 0;

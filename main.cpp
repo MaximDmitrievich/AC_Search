@@ -32,7 +32,7 @@ int main(int argc, char **argv)
             }
         }
         if (pattern.size() > 0) {
-            search.Add(pattern);
+           search.Add(pattern);
         }
         len = 0;
         pattern.clear();
