@@ -16,7 +16,7 @@ namespace ssn
     void TAhoCorasick::Add(std::vector<std::string> &value)
     {
         std::shared_ptr<TNode> node = this->root;
-        for (int i = 0; i < value.size() - 1; i++) {
+        for (int i = 0; i < value.size(); i++) {
             if (node->GetLink().find(value[i]) != node->GetLink().end()) {
                 node = node->GetLink().find(value[i])->second;
             } else {
