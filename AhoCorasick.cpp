@@ -12,6 +12,7 @@ namespace ssn
     {
         this->patterns = 0;
     }
+    
     void TAhoCorasick::Add(std::vector<std::string> &value)
     {
         if (value.empty()) {

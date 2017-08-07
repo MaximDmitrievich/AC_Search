@@ -22,6 +22,7 @@ namespace ssn
         this->link.clear();
 
     }
+    
     std::shared_ptr<TNode> TNodeLink::SetLink(std::string value, const std::shared_ptr<TNode> &nextlink)
     {
         if (this->link.find(value) == this->link.end()) {
