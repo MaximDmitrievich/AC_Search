@@ -4,18 +4,17 @@ int main(int argc, char **argv)
 {
     std::vector<std::string> pattern;
     std::vector<std::pair<std::string, std::pair<int, int>>> text; //word, num, str
-    std::string input;
     std::string buf;
+    std::string input;
     int len = 0;
-    int inputsize = 0;
     ssn::TAhoCorasick search;
     while (getline(std::cin, input)) {
+        std::cout << input << std::endl;
         input += " ";
         if (input == " " && input.size() == 1) {
             break;
         }
-        inputsize = input.size();
-        for (int i = 0; i < inputsize; i++) {
+        for (int i = 0; i < input.size(); i++) {
             if (input[i] != ' ') {
                 buf.push_back((char) tolower(input[i]));
             } else {
@@ -24,7 +23,7 @@ int main(int argc, char **argv)
                     buf.clear();
                     break;
                 }
-                if (buf.size() > 0  && buf != " ") {
+                if (buf.size() > 0 && buf != " ") {
                     pattern.push_back(buf);
                 }
                 buf.clear();
@@ -32,7 +31,7 @@ int main(int argc, char **argv)
             }
         }
         if (pattern.size() > 0) {
-           search.Add(pattern);
+            search.Add(pattern);
         }
         len = 0;
         pattern.clear();

@@ -1,39 +1,50 @@
-#ifndef NODE_H
-#define NODE_H
+#ifndef _NODE_H_
+#define _NODE_H_
 #include <iostream>
+#include <cstdlib>
 #include <memory>
+#include <map>
+#include <string>
 #include <vector>
 #include <queue>
-#include <map>
-#include <cstdlib>
-#include <string>
 
-namespace ssn
-{
+namespace ssn {
     class TNode {
+    private:
+        std::map<std::string, std::shared_ptr<TNode>> link;
+        std::shared_ptr<TNode> parent;
+        std::shared_ptr<TNode> exit;
+        std::shared_ptr<TNode> fail;
+        int pattern;
+        int size;
     public:
-        virtual ~TNode() {}
+        TNode(const std::shared_ptr<TNode> &parentvalue, const int sizevalue);
+        TNode(const std::shared_ptr<TNode> &parentvalue, const int patternvalue, const int sizevalue);
+        TNode();
+        virtual ~TNode();
 
-        virtual std::shared_ptr<TNode> SetLink(std::string word, const std::shared_ptr<TNode> &nextlink) = 0;
-        virtual std::map<std::string, std::shared_ptr<TNode>> GetLink() = 0;
+        const std::shared_ptr<TNode> &SetLink(std::string word, const std::shared_ptr<TNode> &&nextlink);
+        std::map<std::string, std::shared_ptr<TNode>> &GetLink();
+        const std::shared_ptr<TNode> &GetNode(std::string value);
 
-        virtual void SetParent(const std::shared_ptr<TNode> &value) = 0;
-        virtual std::shared_ptr<TNode> GetParent() = 0;
+        void SetParent(const std::shared_ptr<TNode> &value);
+        const std::shared_ptr<TNode> &GetParent();
 
-        virtual void SetExit(const std::shared_ptr<TNode> &value) = 0;
-        virtual std::shared_ptr<TNode> GetExit() = 0;
+        void SetExit(const std::shared_ptr<TNode> &value);
+        const std::shared_ptr<TNode> &GetExit();
 
-        virtual void SetFail(const std::shared_ptr<TNode> &value) = 0;
-        virtual std::shared_ptr<TNode> GetFail() = 0;
+        void SetFail(const std::shared_ptr<TNode> &value);
+        const std::shared_ptr<TNode> &GetFail();
+        
+        bool IsEnd();
 
-        virtual bool IsEnd() = 0;
+        void SetPattern(const int value);
+        int GetPattern();
 
-        virtual void SetPattern(const int value) = 0;
-        virtual int GetPattern() = 0;
-
-        virtual void SetSize(const int value) = 0;
-        virtual int GetSize() = 0;
+        void SetSize(const int value);
+        int GetSize();
     };
+
 }
 
 #endif
