@@ -42,10 +42,10 @@ int main(int argc, char **argv)
         pos = 0;
         input += " ";
         for (int i = 0; i < input.size(); i++) {
-            if (input[i] == ' ') {
-                pos++;
-            }
             if (input[i] != ' ') {
+                if (input[i + 1] == ' ') {
+                    pos++;
+                }
                 buf.push_back((char) tolower(input[i]));
             } else {
                 if (buf.size() > 0 && buf != " ") {
