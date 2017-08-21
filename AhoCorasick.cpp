@@ -4,13 +4,12 @@ namespace ssn
 {
     TAhoCorasick::TAhoCorasick()
     {
-        std::shared_ptr<TNode> temp (std::make_shared<TNode>());
-        this->root = temp;
+        this->root = new TNode();
         this->patterns = 0;
     }
     TAhoCorasick::~TAhoCorasick()
     {
-        this->root->GetLink().clear();
+        delete this->root;
         this->patterns = 0;
     }
     
@@ -19,115 +18,100 @@ namespace ssn
         if (value.empty()) {
             return;
         }
-        std::shared_ptr<TNode> node = this->root;
+        TNode *node = this->root;
         int i = 0;
         for (std::vector<std::string>::iterator it = value.begin(); it != value.end(); it++) {
-            i++;
             if (node->GetLink().find(*it) != node->GetLink().end()) {
-                std::cout << "Old Node " << *it << std::endl;
                 node = node->GetNode(*it);
                 if (it + 1 == value.end()) {
                     node->SetPattern(++this->patterns);
                     node->SetSize(value.size());
                 }
             } else {
-                std::cout << "New Node " << *it << std::endl;
                 if (it + 1 == value.end()) {
-                    std::cout << "Added end" << std::endl;
-                    node = node->SetLink(*it, std::make_shared<TNode>(node, ++this->patterns, value.size()));
+                    node = node->SetLink(*it, new TNode(node, ++this->patterns, value.size()));
                 } else {
-                    node = node->SetLink(*it, std::make_shared<TNode>(node, i));
-
+                    node = node->SetLink(*it, new TNode(node, i));
                 }
             }
-            std::cout << node->GetPattern() << std::endl << std::endl;
+            i++;
         }
     }
-    void TAhoCorasick::Print(std::vector<std::pair<std::string, std::pair<int, int>>> &value)
+    void TAhoCorasick::Search(std::vector<std::pair<std::string, std::pair<int, int>>> &value)
     {
         if (value.empty()) {
             return;
         }   
-        this->BuildAutomat();
-        int l = 0;
-        std::shared_ptr<TNode> curr = this->root;
-        std::map<std::string, std::shared_ptr<TNode>>::iterator it;
-        for (int i = 0; i < value.size(); i++) {
-    		it = curr->GetLink().find(value[i].first);
-            if (it != curr->GetLink().end()) {
-    			curr = it->second;
+        this->NVAlgoritm();
+        TNode *curr = this->root;
+        std::map<std::string, TNode *>::iterator it;
+        int c = 0;
+        do {
+            while ((it = curr->GetLink().find(value[c].first)) != curr->GetLink().end()) {
+                curr = it->second;
+                TNode *exit = curr->GetExit();
+                if (curr->IsEnd()) {
+                    int str = value[c].second.second;
+                    int pos = value[c].second.first - curr->GetSize() + 1;
+                    if (pos <= 0) {
+                        str--;
+                        pos += curr->GetSize();
+                    }
+                    std::cout << str << ", " << pos << ", " << curr->GetPattern() << std::endl;
+                }
+                while (exit) {
+                    int str = value[c].second.second;
+                    int pos = value[c].second.first - curr->GetSize() + 1;
+                    if (pos <= 0) {
+                        str--;
+                        pos += curr->GetSize();
+                    }
+                    std::cout << str << ", " << pos << ", " << exit->GetPattern() << std::endl;
+                    exit = exit->GetExit();
+                }
+                c++;
+            }
+            if (curr == this->root) {
+                c++;
             } else {
                 curr = curr->GetFail();
-                if (curr) {
-                    it = curr->GetLink().find(value[i].first);
-                    while (curr->GetFail() != this->root && it == curr->GetLink().end()) {
-                        curr = curr->GetFail();
-                        if (curr == nullptr) {
-                            curr = this->root;
-                            break;
-                        }
-                        it = curr->GetLink().find(value[i].first);
-                    }
-                    if (it != curr->GetLink().end()) {
-                        curr = it->second;
-                    } else {
-                        curr = this->root;
-                        l = i + 1;
-
-                    }
-                } else {
-                    curr = this->root;
-                    l = i + 1;
-                }
             }
-            if (!curr->GetLink().empty()) {
-                if (curr->GetExit()) {
-                    curr = curr->GetExit();
-                } else if (curr->GetFail()){
-                    curr = curr->GetFail();
-                }
-            }
-            if (curr->IsEnd()) {
-                std::cout << value[ind].second.second << ", " << value[ind].second.first << ", " << curr->GetPattern() << std::endl;
-                ind++;
-            }
-        }
+        } while (c < value.size());
     }
-    void TAhoCorasick::BuildAutomat()
+    void TAhoCorasick::NVAlgoritm()
     {
-        std::shared_ptr<TNode> node = nullptr;
-        std::map<std::string, std::shared_ptr<TNode>>::iterator it = this->root->GetLink().begin();
+        std::map<std::string, TNode *>::iterator it = this->root->GetLink().begin();
         for (; it != this->root->GetLink().end(); it++) {
             if (it->second->GetParent() == this->root) {
                 it->second->SetFail(this->root);
             }
         }
-        std::queue<std::shared_ptr<TNode>> qNode;
+        this->root->SetFail(this->root);
+        std::queue<TNode *> qNode;
         qNode.push(this->root);
         while (!qNode.empty()) {
-            node = qNode.front();
-            if (node != this->root && !node->IsEnd()) {
+            TNode *node = qNode.front();
+            if (node != this->root && !node->IsLeaf()) {
                 for (it = node->GetLink().begin(); it != node->GetLink().end(); it++) {
-                    std::shared_ptr<TNode> w = node->GetFail();
-                    std::shared_ptr<TNode> nextnode = it->second;
-                    std::string c = it->first;
-                    while (w->GetLink().find(c) == w->GetLink().end() && w != this->root) {
+                    TNode *w = node->GetFail();
+                    TNode *nextnode = it->second;
+                    while (w->GetLink().find(it->first) == w->GetLink().end() && w != this->root) {
                         w = w->GetFail();
                     }
-                    if (w->GetLink().find(c) != w->GetLink().end()) {
-                        nextnode->SetFail(w->GetNode(c));
+                    if (w->GetLink().find(it->first) != w->GetLink().end()) {
+                        nextnode->SetFail(w->GetNode(it->first));
                     } else {
                         nextnode->SetFail(this->root);
                     }
-                    if (!nextnode->GetFail()->IsEnd()) {
+                    if (nextnode->GetFail()->IsEnd()) {
                         nextnode->SetExit(nextnode->GetFail());
                     } else {
-                        nextnode->SetFail(nextnode->GetFail()->GetExit());
+                        nextnode->SetExit(nextnode->GetFail()->GetExit());
                     }
                 }
             }
             qNode.pop();
-            if (!node->IsEnd()) {
+            if (!node->IsLeaf()) {
                 for (it = node->GetLink().begin(); it != node->GetLink().end(); it++) {
                     qNode.push(it->second);
                 }

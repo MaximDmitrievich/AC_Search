@@ -3,13 +3,12 @@
 int main(int argc, char **argv)
 {
     std::vector<std::string> pattern;
-    std::vector<std::pair<std::string, std::pair<int, int>>> text; //word, num, str
+    std::vector<std::pair<std::string, std::pair<int, int>>> text;
     std::string buf;
     std::string input;
     int len = 0;
     ssn::TAhoCorasick search;
     while (getline(std::cin, input)) {
-        std::cout << input << std::endl;
         input += " ";
         if (input == " " && input.size() == 1) {
             break;
@@ -37,23 +36,25 @@ int main(int argc, char **argv)
         pattern.clear();
     }
     int str = 0;
-    int pos = 1;
+    int pos = 0;
     while (getline(std::cin, input)) {
         str++;
-        pos = 1;
+        pos = 0;
         input += " ";
         for (int i = 0; i < input.size(); i++) {
+            if (input[i] == ' ') {
+                pos++;
+            }
             if (input[i] != ' ') {
                 buf.push_back((char) tolower(input[i]));
             } else {
                 if (buf.size() > 0 && buf != " ") {
                     text.push_back(std::make_pair(buf, std::make_pair(pos, str)));
-                    pos++;
                 }
                 buf.clear();
             }
         }
     }
-    search.Print(text);
+    search.Search(text);
     return 0;
 }

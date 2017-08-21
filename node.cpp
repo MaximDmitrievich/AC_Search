@@ -1,15 +1,15 @@
 #include "node.h"
 
 namespace ssn {
-    TNode::TNode(const std::shared_ptr<TNode> &parentvalue, const int sizevalue) : parent(parentvalue), exit(nullptr), fail(nullptr), pattern(-1), size(sizevalue)
+    TNode::TNode(TNode *parentvalue, const int sizevalue) : parent(parentvalue), exit(nullptr), fail(nullptr), pattern(-1), size(sizevalue)
     {
     
     }
-    TNode::TNode(const std::shared_ptr<TNode> &parentvalue, const int patternvalue, const int sizevalue) : parent(parentvalue), pattern(patternvalue), size(sizevalue)
+    TNode::TNode(TNode *parentvalue, const int patternvalue, const int sizevalue) : parent(parentvalue), pattern(patternvalue), size(sizevalue)
     {
     
     }
-    TNode::TNode() : parent(nullptr), exit(nullptr), fail(nullptr), pattern(-1), size(0)
+    TNode::TNode() : parent(nullptr), exit(this), fail(this), pattern(-1), size(0)
     {
     
     }
@@ -19,52 +19,55 @@ namespace ssn {
         this->parent = nullptr;
         this->exit = nullptr;
         this->fail = nullptr;
+        for (std::map<std::string, TNode *>::iterator it = this->link.begin(); it != this->link.end(); it++) {
+            delete it->second;
+        }
         this->link.clear();
     }
 
-    const std::shared_ptr<TNode> &TNode::SetLink(std::string word, const std::shared_ptr<TNode> &&nextlink)
+    TNode *TNode::SetLink(std::string word, TNode *nextlink) 
     {
-        this->link.insert(std::pair<std::string, const std::shared_ptr<TNode>&>(word, nextlink));
-        const std::shared_ptr<TNode> &result = this->link.find(word)->second;
+        this->link.insert(std::pair<std::string, TNode *>(word, nextlink));
+        TNode *result = this->link.find(word)->second;
         return result;
     }
-    std::map<std::string, std::shared_ptr<TNode>> &TNode::GetLink()
+    std::map<std::string, TNode *> &TNode::GetLink()
     {
         return this->link;
     }
-    const std::shared_ptr<TNode> &TNode::GetNode(std::string value)
+    TNode *TNode::GetNode(std::string value)
     {
-        std::shared_ptr<TNode> &result = this->link.find(value)->second;
+        TNode *result = this->link.find(value)->second;
         return result;
     }
 
-    void TNode::SetParent(const std::shared_ptr<TNode> &value)
+    void TNode::SetParent(TNode *value)
     {
         this->parent = value;
     }
-    const std::shared_ptr<TNode> &TNode::GetParent() 
+    TNode *TNode::GetParent() 
     {
-        const std::shared_ptr<TNode> &result = this->parent;
+        TNode *result = this->parent;
         return result;
     }
 
-    void TNode::SetExit(const std::shared_ptr<TNode> &value)
+    void TNode::SetExit(TNode *value)
     {
         this->exit = value;
     }
-    const std::shared_ptr<TNode> &TNode::GetExit()
+    TNode *TNode::GetExit()
     {
-        const std::shared_ptr<TNode> &result = this->exit;
+        TNode *result = this->exit;
         return result;
     }
 
-    void TNode::SetFail(const std::shared_ptr<TNode> &value)
+    void TNode::SetFail(TNode *value)
     {
         this->fail = value;
     }
-    const std::shared_ptr<TNode> &TNode::GetFail()
+    TNode *TNode::GetFail()
     {
-        const std::shared_ptr<TNode> &result = this->fail;
+        TNode *result = this->fail;
         return result;
     }
     
@@ -72,6 +75,15 @@ namespace ssn {
     {
         bool result = false;
         if (this->pattern != -1) {
+            result = true;
+        }
+        return result;
+    }
+
+    bool TNode::IsLeaf()
+    {
+        bool result = false;
+        if (this->link.empty()) {
             result = true;
         }
         return result;

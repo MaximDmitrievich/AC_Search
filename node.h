@@ -11,32 +11,33 @@
 namespace ssn {
     class TNode {
     private:
-        std::map<std::string, std::shared_ptr<TNode>> link;
-        std::shared_ptr<TNode> parent;
-        std::shared_ptr<TNode> exit;
-        std::shared_ptr<TNode> fail;
+        std::map<std::string, TNode *> link;
+        TNode *parent;
+        TNode *exit;
+        TNode *fail;
         int pattern;
         int size;
     public:
-        TNode(const std::shared_ptr<TNode> &parentvalue, const int sizevalue);
-        TNode(const std::shared_ptr<TNode> &parentvalue, const int patternvalue, const int sizevalue);
+        TNode(TNode *parentvalue, const int sizevalue);
+        TNode(TNode  *parentvalue, const int patternvalue, const int sizevalue);
         TNode();
         virtual ~TNode();
 
-        const std::shared_ptr<TNode> &SetLink(std::string word, const std::shared_ptr<TNode> &&nextlink);
-        std::map<std::string, std::shared_ptr<TNode>> &GetLink();
-        const std::shared_ptr<TNode> &GetNode(std::string value);
+        TNode *SetLink(std::string word, TNode *nextlink);
+        std::map<std::string, TNode *> &GetLink();
+        TNode *GetNode(std::string value);
 
-        void SetParent(const std::shared_ptr<TNode> &value);
-        const std::shared_ptr<TNode> &GetParent();
+        void SetParent(TNode *value);
+        TNode *GetParent();
 
-        void SetExit(const std::shared_ptr<TNode> &value);
-        const std::shared_ptr<TNode> &GetExit();
+        void SetExit(TNode *value);
+        TNode *GetExit();
 
-        void SetFail(const std::shared_ptr<TNode> &value);
-        const std::shared_ptr<TNode> &GetFail();
+        void SetFail(TNode *value);
+        TNode *GetFail();
         
         bool IsEnd();
+        bool IsLeaf();
 
         void SetPattern(const int value);
         int GetPattern();
