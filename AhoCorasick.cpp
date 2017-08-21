@@ -51,10 +51,22 @@ namespace ssn
                 curr = it->second;
                 TNode *exit = curr->GetExit();
                 if (curr->IsEnd()) {
-                    std::cout << value[c].second.second << ", " << value[c].second.first - curr->GetSize() + 1 << ", " << curr->GetPattern() << std::endl;
+                    int str = value[c].second.second;
+                    int pos = value[c].second.first - curr->GetSize() + 1;
+                    if (pos <= 0) { 
+                        pos += curr->GetSize();
+                        str--;
+                    }
+                    std::cout << str << ", " << pos << ", " << curr->GetPattern() << std::endl;
                 }
-                while (exit) {
-                    std::cout << value[c].second.second << ", " << value[c].second.first - exit->GetSize() + 1 << ", " << exit->GetPattern() << std::endl;
+                while (exit && exit->IsEnd()) {
+                    int str = value[c].second.second;
+                    int pos = value[c].second.second - curr->GetSize() + 1;
+                    if (pos <= 0) {
+                        pos += curr->GetSize();
+                        str--;
+                    }
+                    std::cout << str << ", " << pos << ", " << exit->GetPattern() << std::endl;
                     exit = exit->GetExit();
                 }
                 c++;
