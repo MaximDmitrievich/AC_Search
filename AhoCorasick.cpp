@@ -64,7 +64,7 @@ namespace ssn
                     int pos = value[c].second.second - curr->GetSize() + 1;
                     if (pos <= 0) {
                         pos += curr->GetSize();
-                        str = value[c - curr->GetSize()].second.second;
+                        str = value[c - exit->GetSize()].second.second;
                     }
                     std::cout << str << ", " << pos << ", " << exit->GetPattern() << std::endl;
                     exit = exit->GetExit();
