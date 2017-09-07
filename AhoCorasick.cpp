@@ -46,7 +46,7 @@ namespace ssn
         TNode *curr = this->root;
         std::map<std::string, TNode *>::iterator it;
         int c = 0;
-        do {
+       do {
             while ((it = curr->GetLink().find(value[c].first)) != curr->GetLink().end()) {
                 curr = it->second;
                 TNode *exit = curr->GetExit();
@@ -82,7 +82,7 @@ namespace ssn
                             break;
                         }
                     }
-                    int pos = value[c].second.second - curr->GetSize() + 1;
+                    int pos = value[c].second.first - curr->GetSize() + 1;
                     if (pos <= 0) {
                         pos += prev_str;
                         str = value[c - exit->GetSize()].second.second;
