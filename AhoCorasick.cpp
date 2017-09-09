@@ -55,18 +55,17 @@ namespace ssn
                     int prev_str = 0;
                     int j = c;
                     while (j > 0) {
-                        if (value[j].second.first > value[j - 1].second.first) {
+                        if (value[j].second.second == value[j - 1].second.second) {
                             j--;
                         } else {
-                            prev_str = value[j - 1].second.first;
-                            break;
+                            prev_str += value[j - 1].second.first;
+                            j--;
                         }
                     }
-
                     int pos = value[c].second.first - curr->GetSize() + 1;
                     if (pos <= 0) {
                         pos += prev_str;
-                        str = value[c - curr->GetSize()].second.second;
+                        str = value[c - curr->GetSize() + 1].second.second;
                     }
                     std::cout << str << ", " << pos << ", " << curr->GetPattern() << std::endl;
                 }
@@ -75,17 +74,17 @@ namespace ssn
                     int prev_str = 0;
                     int j = c;
                     while (j > 0) {
-                        if (value[j].second.first > value[j - 1].second.first) {
+                        if (value[j].second.second == value[j - 1].second.second) {
                             j--;
                         } else {
-                            prev_str = value[j - 1].second.first;
-                            break;
+                            prev_str += value[j - 1].second.first;
+                            j--;
                         }
                     }
                     int pos = value[c].second.first - curr->GetSize() + 1;
                     if (pos <= 0) {
                         pos += prev_str;
-                        str = value[c - exit->GetSize()].second.second;
+                        str = value[c - exit->GetSize() + 1].second.second;
                     }
                     std::cout << str << ", " << pos << ", " << exit->GetPattern() << std::endl;
                     exit = exit->GetExit();
