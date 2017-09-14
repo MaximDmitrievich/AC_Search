@@ -52,9 +52,9 @@ namespace ssn
                 TNode *exit = curr->GetExit();
                 if (curr->IsEnd()) {
                     int str = value[c].second.second;
-                    int prev_str = 0;
+                    int prev_str = 0; //length
                     int j = c;
-                    while (j > 0) {
+                    while (j > c - curr->GetSize() + 1 && j > 0) {
                         if (value[j].second.second == value[j - 1].second.second) {
                             j--;
                         } else {
@@ -71,9 +71,9 @@ namespace ssn
                 }
                 while (exit && exit->IsEnd()) {
                     int str = value[c].second.second;
-                    int prev_str = 0;
+                    int prev_str = 0; //length
                     int j = c;
-                    while (j > 0) {
+                    while (j > c - curr->GetSize() + 1 && j > 0) {
                         if (value[j].second.second == value[j - 1].second.second) {
                             j--;
                         } else {
